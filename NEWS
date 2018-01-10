@@ -1,0 +1,26 @@
+earthtools 1.2.0
+===================
+
+* deprecated compute_projection_rhumb
+* changed compute_projection to work with magrittr pipes while maintaining backwards compatibility
+
+earthtools 1.1.0
+===================
+
+* added method "encode" to create geohashes
+
+earthtools 1.0.2
+===================
+
+* bugfix, compute_projection had a namespace issue causing failure if user did not load the geosphere package. This is now resolved.
+
+earthtools 1.0.1
+===================
+
+* documentation upate, added examples for compute_projection
+
+earthtools 1.0.0
+===================
+
+* removed some original distance/course functions
+* added several wrappers to geosphere functions

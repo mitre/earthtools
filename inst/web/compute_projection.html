@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>compute_projection. earthtools 1.2.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="
+Matt Pollock
+
+Seth Wenchel
+">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">earthtools 1.2.0</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>compute location of coordinates after great circle projection</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>compute_projection(x, ..., method&nbsp;=&nbsp;"GC")</div>
+<div>"compute_projection"(.data, latitude, longitude, bearing, distance, method&nbsp;=&nbsp;"GC")</div>
+<div>"compute_projection"(latitude, longitude, bearing, distance, output_type&nbsp;=&nbsp;"data.table", method&nbsp;=&nbsp;"GC")</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>x</dt>
+      <dd>An object used to determine which implementation to use</dd>
+      <dt>...</dt>
+      <dd>It's an S3 thing. You wouldn't understand.</dd>
+      <dt>method</dt>
+      <dd>Either <code>"GC"</code> [default] or <code>"rhumb"</code>. Used to declare
+either a great circle calculation or rhumb line calculation</dd>
+      <dt>.data</dt>
+      <dd>An object that inherits from <code><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></code>. In 
+general this will be on of <code>data.frame</code>, 
+<code><a href='http://www.inside-r.org/packages/cran/data.table/docs/data.table'>data.table</a></code>, or <code><a href='http://www.inside-r.org/packages/cran/dplyr/docs/tbl_df'>tbl_df</a></code></dd>
+      <dt>latitude</dt>
+      <dd>Either a numeric vector of latitudes [degrees] or the column
+of <code>.data</code> which contains latitudes. This maybe quoted or unquoted;
+see examples.</dd>
+      <dt>longitude</dt>
+      <dd>Either a numeric vector of longitudes [degrees]
+corresponding with latitude or the column of <code>.data</code> which contains
+longitudes. This maybe quoted or unquoted; see examples.</dd>
+      <dt>bearing</dt>
+      <dd>Either a numeric vector of bearings [degrees] or the column of
+<code>.data</code> which contains bearings/headings. This maybe quoted or
+unquoted see examples.</dd>
+      <dt>distance</dt>
+      <dd>Either a numeric vector of projection distance [nautical
+miles] or the column of <code>.data</code> which contains projection distances.
+This maybe quoted or unquoted see examples.</dd>
+      <dt>output_type</dt>
+      <dd>string in <code>c("matrix", "data.table", "data.frame", 
+"list")</code></dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+If <code>.data</code> is supplied, an object of the same type and with the
+  same columns as <code>.data</code> plus two more, <code>end_latitude</code> and
+  <code>end_longitude</code>.  Otherwise, an object of type determined by
+  output_type which will generally have two columns, latitude and longitude.
+  If the input coordinates have length 1, then a named numeric vector is
+  returned.
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>This function provides a convienant wrapper to 
+<code><a href='http://www.inside-r.org/packages/cran/geosphere/docs/destPoint'>destPoint</a></code></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># basic use
+compute_projection(39.86167, -104.6732, 90, 15)
+</div>
+<div class='output'>   latitude longitude
+1: 39.86121 -104.3475
+</div>
+<div class='input'>compute_projection(39.86167, -104.6732, 86:90, 1:15)
+</div>
+<div class='output'>    latitude longitude
+ 1: 39.86283 -104.6515
+ 2: 39.86341 -104.6298
+ 3: 39.86340 -104.6081
+ 4: 39.86280 -104.5864
+ 5: 39.86162 -104.5646
+ 6: 39.86857 -104.5432
+ 7: 39.86768 -104.5214
+ 8: 39.86619 -104.4996
+ 9: 39.86412 -104.4778
+10: 39.86147 -104.4561
+11: 39.87421 -104.4349
+12: 39.87185 -104.4130
+13: 39.86889 -104.3911
+14: 39.86535 -104.3693
+15: 39.86121 -104.3475
+</div>
+<div class='input'>
+# use inside a data.table
+library(data.table)
+apts &lt;- data.table(airport=c(&quot;ATL&quot;, &quot;DEN&quot;, &quot;ORD&quot;, &quot;SEA&quot;),
+                   latitude=c(33.63670, 39.86167, 41.97933, 47.44989),
+                   longitude=c(-84.42786, -104.67317, -87.90739, -122.31178))
+apts[, c(&quot;platitude&quot;, &quot;plongitude&quot;):=compute_projection(latitude, longitude, 90, 15)]
+</div>
+<div class='output'>   airport latitude  longitude platitude plongitude
+1:     ATL 33.63670  -84.42786  33.63634  -84.12762
+2:     DEN 39.86167 -104.67317  39.86121 -104.34752
+3:     ORD 41.97933  -87.90739  41.97884  -87.57113
+4:     SEA 47.44989 -122.31178  47.44930 -121.94213
+</div>
+<div class='input'>
+# use with magrittr
+library(magrittr)
+apts %&gt;% compute_projection(latitude, longitude, 90, 15)
+</div>
+<div class='output'>Note: no visible binding for global variable &#39;latitude&#39; 
+Note: no visible binding for global variable &#39;longitude&#39; 
+Note: no visible binding for global variable &#39;.&#39; 
+</div>
+<div class='output'>   airport latitude  longitude platitude plongitude end_latitude end_longitude
+1:     ATL 33.63670  -84.42786  33.63634  -84.12762     33.63634     -84.12762
+2:     DEN 39.86167 -104.67317  39.86121 -104.34752     39.86121    -104.34752
+3:     ORD 41.97933  -87.90739  41.97884  -87.57113     41.97884     -87.57113
+4:     SEA 47.44989 -122.31178  47.44930 -121.94213     47.44930    -121.94213
+</div>
+<div class='input'>
+# columns as strings
+lat_col &lt;- names(apts)[2]
+apts %&gt;% compute_projection(lat_col, &quot;longitude&quot;, 90, 15)
+</div>
+<div class='output'>   airport latitude  longitude platitude plongitude end_latitude end_longitude
+1:     ATL 33.63670  -84.42786  33.63634  -84.12762     33.63634     -84.12762
+2:     DEN 39.86167 -104.67317  39.86121 -104.34752     39.86121    -104.34752
+3:     ORD 41.97933  -87.90739  41.97884  -87.57113     41.97884     -87.57113
+4:     SEA 47.44989 -122.31178  47.44930 -121.94213     47.44930    -121.94213
+</div>
+<div class='input'>
+# predict next position
+tracks &lt;- data.frame(id = c(&quot;a&quot;,&quot;b&quot;,&quot;c&quot;),
+                     lat = 0,
+                     lon = 0,
+                     heading = 30,
+                     ground_speed = seq(300,360, 30))
+time_step &lt;- 1/60 #one minute
+
+tracks %&gt;% compute_projection(lat, lon, heading, tracks$ground_speed*time_step)
+</div>
+<div class='output'>Note: no visible binding for global variable &#39;lat&#39; 
+Note: no visible binding for global variable &#39;lon&#39; 
+Note: no visible binding for global variable &#39;heading&#39; 
+</div>
+<div class='output'>Source: local data frame [3 x 7]
+
+      id   lat   lon heading ground_speed end_latitude end_longitude
+  (fctr) (dbl) (dbl)   (dbl)        (dbl)        (dbl)         (dbl)
+1      a     0     0      30          300   0.07216052    0.04166192
+2      b     0     0      30          330   0.07937657    0.04582812
+3      c     0     0      30          360   0.08659262    0.04999432
+</div>
+<div class='input'></div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>compute_projection</li><li>compute_projection.data.frame</li><li>compute_projection.numeric</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    
+    <h2>Author</h2>
+    
+Matt Pollock
+
+Seth Wenchel
+
+    
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>
