@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>earthtools. — earthtools • earthtools</title>
+<title>compute spherical cross track distance (error) — et_dist_cross_track • earthtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -28,9 +28,13 @@
 
 
 
-<meta property="og:title" content="earthtools. — earthtools" />
+<meta property="og:title" content="compute spherical cross track distance (error) — et_dist_cross_track" />
 
-<meta property="og:description" content="earthtools." />
+<meta property="og:description" content="This function provides a convienant wrapper to 
+dist2gc. Per that documentation, this measures
+the distance from the input point(s) defined by latitude and 
+longitude to the nearest location on the great circle
+path defined by the path_* inputs." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -94,24 +98,66 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>earthtools.</h1>
+    <h1>compute spherical cross track distance (error)</h1>
     
-    <div class="hidden name"><code>earthtools.Rd</code></div>
+    <div class="hidden name"><code>et_dist_cross_track.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>earthtools.</p>
+    <p>This function provides a convienant wrapper to 
+<code><a href='http://www.rdocumentation.org/packages/geosphere/topics/dist2gc'>dist2gc</a></code>. Per that documentation, this measures
+the distance from the input point(s) defined by <code>latitude</code> and 
+<code>longitude</code> to the nearest location on the great circle
+path defined by the <code>path_*</code> inputs.</p>
     
     </div>
 
-        
+    <pre class="usage"><span class='fu'>et_dist_cross_track</span>(<span class='no'>latitude</span>, <span class='no'>longitude</span>, <span class='no'>path_latitude1</span>, <span class='no'>path_longitude1</span>,
+  <span class='no'>path_latitude2</span>, <span class='no'>path_longitude2</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>latitude</th>
+      <td><p>numeric vector of latitudes [degrees]</p></td>
+    </tr>
+    <tr>
+      <th>longitude</th>
+      <td><p>numeric vector of longitudes [degrees] corresponding with latitude</p></td>
+    </tr>
+    <tr>
+      <th>path_latitude1</th>
+      <td><p>numeric vector of latitudes [degrees]</p></td>
+    </tr>
+    <tr>
+      <th>path_longitude1</th>
+      <td><p>numeric vector of longitudes [degrees] corresponding with path_latitude1</p></td>
+    </tr>
+    <tr>
+      <th>path_latitude2</th>
+      <td><p>numeric vector of latitudes [degrees]</p></td>
+    </tr>
+    <tr>
+      <th>path_longitude2</th>
+      <td><p>numeric vector of longitudes [degrees] corresponding with path_latitude2</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>numeric, cross track distance nautical miles</p>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-                </ul>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+          </ul>
 
   </div>
 </div>
