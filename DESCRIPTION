@@ -1,6 +1,6 @@
 Package: earthtools
 Title: Tools for working on planet Earth
-Version: 1.2.0
+Version: 2.0.0
 Authors@R: c(person("Seth","Wenchel", email = "seth@wenchel.com", role =c("aut")),
              person("Kevin","Sprong", role = "aut"), 
              person("Matt","Pollock", role = c("aut", "cre"), email = "mpollock@mitre.org"),
@@ -18,4 +18,4 @@ Imports:
     dplyr
 License: Apache License 2.0 | file LICENSE
 Date: 2015-10-30
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

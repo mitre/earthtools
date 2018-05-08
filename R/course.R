@@ -7,10 +7,11 @@
 #' @param longitude1 numeric vector of longitudes [degrees] corresponding with latitude1
 #' @param latitude2 numeric vector of latitudes [degrees]
 #' @param longitude2 numeric vector of longitudes [degrees] corresponding with latitude2
+#' @importFrom geosphere bearing
 #' @return numeric, bearing in degrees
 #' @export
-compute_bearing_initial <- function(latitude1, longitude1, latitude2, longitude2) {
-  return(geosphere::bearing(
+et_bearing_initial <- function(latitude1, longitude1, latitude2, longitude2) {
+  return(bearing(
     p1=matrix(c(longitude1, latitude1), ncol = 2, byrow = FALSE),
     p2=matrix(c(longitude2, latitude2), ncol = 2, byrow = FALSE)))
 }
@@ -24,10 +25,11 @@ compute_bearing_initial <- function(latitude1, longitude1, latitude2, longitude2
 #' @param longitude1 numeric vector of longitudes [degrees] corresponding with latitude1
 #' @param latitude2 numeric vector of latitudes [degrees]
 #' @param longitude2 numeric vector of longitudes [degrees] corresponding with latitude2
+#' @importFrom geosphere finalBearing
 #' @return numeric, bearing in degrees
 #' @export
-compute_bearing_terminal <- function(latitude1, longitude1, latitude2, longitude2) {
-  return(geosphere::finalBearing(
+et_bearing_terminal <- function(latitude1, longitude1, latitude2, longitude2) {
+  return(finalBearing(
     p1=matrix(c(longitude1, latitude1), ncol = 2, byrow = FALSE),
     p2=matrix(c(longitude2, latitude2), ncol = 2, byrow = FALSE)))
 }
@@ -41,9 +43,10 @@ compute_bearing_terminal <- function(latitude1, longitude1, latitude2, longitude
 #' @param longitude1 numeric vector of longitudes [degrees] corresponding with latitude1
 #' @param latitude2 numeric vector of latitudes [degrees]
 #' @param longitude2 numeric vector of longitudes [degrees] corresponding with latitude2
+#' @importFrom geosphere bearingRhumb
 #' @return numeric, bearing in degrees
 #' @export
-compute_bearing_rhumb <- function(latitude1, longitude1, latitude2, longitude2) {
+et_bearing_rhumb <- function(latitude1, longitude1, latitude2, longitude2) {
   return(geosphere::bearingRhumb(
     p1=matrix(c(longitude1, latitude1), ncol = 2, byrow = FALSE),
     p2=matrix(c(longitude2, latitude2), ncol = 2, byrow = FALSE)))
