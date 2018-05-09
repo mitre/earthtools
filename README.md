@@ -1,3 +1,8 @@
+---
+output: 
+  html_document:
+    keep_md: true
+---
 
 A package to make Spherical Earth computations easier.
 
@@ -35,7 +40,7 @@ Now we can compute distances:
 
 ```r
 airports %>%
-  mutate(dist=compute_dist_haversine(latitude, longitude, jfk$latitude, jfk$longitude))
+  mutate(dist=et_dist_haversine(latitude, longitude, jfk$latitude, jfk$longitude))
 ```
 
 ```
@@ -51,10 +56,10 @@ Determine the initial/final bearing
 ```r
 airports %>%
   filter(airport!="JFK") %>%
-  mutate(bearing_initial=compute_bearing_initial(latitude, longitude, 
-                                                 jfk$latitude, jfk$longitude),
-         bearing_terminal=compute_bearing_terminal(latitude, longitude, 
-                                                   jfk$latitude, jfk$longitude))
+  mutate(bearing_initial=et_bearing_initial(latitude, longitude, 
+                                            jfk$latitude, jfk$longitude),
+         bearing_terminal=et_bearing_terminal(latitude, longitude, 
+                                              jfk$latitude, jfk$longitude))
 ```
 
 ```
@@ -71,7 +76,7 @@ The `dplyr` way:
 
 ```r
 airports %>%
-  compute_projection(latitude, longitude, bearing=90, distance=10)
+  et_projection(latitude, longitude, bearing=90, distance=10)
 ```
 
 ```
@@ -86,8 +91,8 @@ The `data.table` way:
 
 ```r
 airports_dt[,
-            c("end_latitude", "end_longitude"):=compute_projection(latitude, longitude, 
-                                                                   bearing=90, distance=10)
+            c("end_latitude", "end_longitude"):=et_projection(latitude, longitude, 
+                                                              bearing=90, distance=10)
             ]
 airports_dt
 ```
