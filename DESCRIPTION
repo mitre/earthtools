@@ -17,5 +17,6 @@ Imports:
     data.table,
     dplyr
 License: Apache License 2.0 | file LICENSE
+BugReportsURL: https://github.com/mitre/earthtools
 Date: 2018-10-15
 RoxygenNote: 6.1.0
