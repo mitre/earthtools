@@ -37,16 +37,16 @@ jfk <- airports %>% filter(airport=="JFK")
 Now we can compute distances:
 ```{r}
 airports %>%
-  mutate(dist=et_dist_haversine(latitude, longitude, jfk$latitude, jfk$longitude))
+  mutate(dist=compute_dist_haversine(latitude, longitude, jfk$latitude, jfk$longitude))
 ```
 
 Determine the initial/final bearing
 ```{r}
 airports %>%
   filter(airport!="JFK") %>%
-  mutate(bearing_initial=et_bearing_initial(latitude, longitude, 
+  mutate(bearing_initial=compute_bearing_initial(latitude, longitude, 
                                             jfk$latitude, jfk$longitude),
-         bearing_terminal=et_bearing_terminal(latitude, longitude, 
+         bearing_terminal=compute_bearing_terminal(latitude, longitude, 
                                               jfk$latitude, jfk$longitude))
 ```
 
@@ -56,13 +56,13 @@ Since the projected coordinates have both a latitude and longitude output, this 
 The `dplyr` way:
 ```{r}
 airports %>%
-  et_projection(latitude, longitude, bearing=90, distance=10)
+  compute_projection(latitude, longitude, bearing=90, distance=10)
 ```
 
 The `data.table` way:
 ```{r}
 airports_dt[,
-            c("end_latitude", "end_longitude"):=et_projection(latitude, longitude, 
+            c("end_latitude", "end_longitude"):=compute_projection(latitude, longitude, 
                                                               bearing=90, distance=10)
             ]
 airports_dt

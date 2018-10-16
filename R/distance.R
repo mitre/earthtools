@@ -10,7 +10,7 @@
 #' @importFrom geosphere distHaversine
 #' @return numeric, distance in nautical miles
 #' @export
-et_dist_haversine <- function(latitude1, longitude1, latitude2, longitude2) {
+compute_dist_haversine <- function(latitude1, longitude1, latitude2, longitude2) {
   return(distHaversine(
     p1=matrix(c(longitude1, latitude1), ncol = 2, byrow = FALSE),
     p2=matrix(c(longitude2, latitude2), ncol = 2, byrow = FALSE),
@@ -29,7 +29,7 @@ et_dist_haversine <- function(latitude1, longitude1, latitude2, longitude2) {
 #' @importFrom geosphere distRhumb
 #' @return numeric, distance in nautical miles
 #' @export
-et_dist_rhumb <- function(latitude1, longitude1, latitude2, longitude2) {
+compute_dist_rhumb <- function(latitude1, longitude1, latitude2, longitude2) {
   return(distRhumb(
     p1=matrix(c(longitude1, latitude1), ncol = 2, byrow = FALSE),
     p2=matrix(c(longitude2, latitude2), ncol = 2, byrow = FALSE),
@@ -53,7 +53,7 @@ et_dist_rhumb <- function(latitude1, longitude1, latitude2, longitude2) {
 #' @importFrom geosphere alongTrackDistance
 #' @return numeric, distance along path in nautical miles
 #' @export
-et_dist_along_path <- function(latitude, longitude, path_latitude1, path_longitude1,
+compute_dist_along_path <- function(latitude, longitude, path_latitude1, path_longitude1,
                             path_latitude2, path_longitude2) {
   return(alongTrackDistance(
     p1=matrix(c(path_longitude1, path_latitude1), ncol = 2, byrow = FALSE),
@@ -79,7 +79,7 @@ et_dist_along_path <- function(latitude, longitude, path_latitude1, path_longitu
 #' @importFrom geosphere dist2gc
 #' @return numeric, cross track distance nautical miles
 #' @export
-et_dist_cross_track <- function(latitude, longitude, path_latitude1, path_longitude1,
+compute_dist_cross_track <- function(latitude, longitude, path_latitude1, path_longitude1,
                              path_latitude2, path_longitude2) {
   return(dist2gc(
     p1=matrix(c(path_longitude1, path_latitude1), ncol = 2, byrow = FALSE),
@@ -103,7 +103,7 @@ et_dist_cross_track <- function(latitude, longitude, path_latitude1, path_longit
 #' @importFrom geosphere dist2Line
 #' @return numeric, distance along path in nautical miles
 #' @export
-et_dist_to_polygon <- function(latitude, longitude, poly_latitude, poly_longitude) {
+compute_dist_to_polygon <- function(latitude, longitude, poly_latitude, poly_longitude) {
   return(dist2Line(
     p1=matrix(c(longitude, latitude), ncol = 2, byrow = FALSE),
     p2=matrix(c(poly_longitude, poly_latitude), ncol = 2, byrow = FALSE),

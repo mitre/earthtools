@@ -35,23 +35,23 @@
 #'   
 #' @examples
 #' # basic use
-#' et_projection(39.86167, -104.6732, 90, 15)
-#' et_projection(39.86167, -104.6732, 86:90, 1:15)
+#' compute_projection(39.86167, -104.6732, 90, 15)
+#' compute_projection(39.86167, -104.6732, 86:90, 1:15)
 #' 
 #' # use inside a data.table
 #' library(data.table)
 #' apts <- data.table(airport=c("ATL", "DEN", "ORD", "SEA"),
 #'                    latitude=c(33.63670, 39.86167, 41.97933, 47.44989),
 #'                    longitude=c(-84.42786, -104.67317, -87.90739, -122.31178))
-#' apts[, c("platitude", "plongitude"):=et_projection(latitude, longitude, 90, 15)]
+#' apts[, c("platitude", "plongitude"):=compute_projection(latitude, longitude, 90, 15)]
 #' 
 #' # use with magrittr
 #' library(magrittr)
-#' apts %>% et_projection(latitude, longitude, 90, 15)
+#' apts %>% compute_projection(latitude, longitude, 90, 15)
 #' 
 #' # columns as strings
 #' lat_col <- names(apts)[2]
-#' apts %>% et_projection(lat_col, "longitude", 90, 15)
+#' apts %>% compute_projection(lat_col, "longitude", 90, 15)
 #' 
 #' # predict next position
 #' tracks <- data.frame(id = c("a","b","c"),
@@ -61,25 +61,25 @@
 #'                      ground_speed = seq(300,360, 30))
 #' time_step <- 1/60 #one minute
 #' 
-#' tracks %>% et_projection(lat, lon, heading, tracks$ground_speed*time_step)
+#' tracks %>% compute_projection(lat, lon, heading, tracks$ground_speed*time_step)
 #' 
 #' @export
 #' @importFrom geosphere destPoint
-#' @rdname et_projection
-et_projection <- function(x, ..., method="GC"){
-  UseMethod("et_projection")
+#' @rdname compute_projection
+compute_projection <- function(x, ..., method="GC"){
+  UseMethod("compute_projection")
 }
 
 #' @export
-#' @rdname et_projection
+#' @rdname compute_projection
 #' @importFrom dplyr rename bind_cols %>%
-et_projection.data.frame <- function(.data, latitude, longitude, bearing, distance, method="GC"){
+compute_projection.data.frame <- function(.data, latitude, longitude, bearing, distance, method="GC"){
   lat_ <- determine_val(.data, substitute(latitude))
   lon_ <- determine_val(.data, substitute(longitude))
   bearing_ <- determine_val(.data, substitute(bearing))
   dist_ <- determine_val(.data, substitute(distance))
   
-  et_projection.numeric(lat_, lon_, bearing_, dist_,output_type = class(.data)) %>%
+  compute_projection.numeric(lat_, lon_, bearing_, dist_,output_type = class(.data)) %>%
     rename(end_latitude=latitude, end_longitude=longitude) %>%
     bind_cols(.data,.)%>%
     format_return(class(.data)) %>%
@@ -115,8 +115,8 @@ format_return <- function(.data, return_type){
 #' @importFrom data.table data.table
 #' @importFrom dplyr tbl tbl_df
 #' @importFrom geosphere destPoint destPointRhumb
-#' @rdname et_projection
-et_projection.numeric <- function(latitude, longitude, bearing, distance, output_type="data.table", method="GC") {
+#' @rdname compute_projection
+compute_projection.numeric <- function(latitude, longitude, bearing, distance, output_type="data.table", method="GC") {
   valid_out_types <- c("matrix", "data.table", "data.frame", "list", "tbl", "tbl_df")
   if (!any(output_type %in% valid_out_types)) {
     stop(paste0("invalid output type specified, must be one of:\n\t", 
@@ -151,7 +151,7 @@ et_projection.numeric <- function(latitude, longitude, bearing, distance, output
 #' compute location of coordinates after rhumb line projection
 #' 
 #' @description 
-#' **DEPRECATED** Please use \code{et_projection(method="rhumb")}
+#' **DEPRECATED** Please use \code{compute_projection(method="rhumb")}
 #' 
 #' This function provides a convienant wrapper to 
 #' \code{\link[geosphere]{destPointRhumb}}
@@ -165,7 +165,7 @@ et_projection.numeric <- function(latitude, longitude, bearing, distance, output
 #' @return a \code{data.table} with columns latitude and longitude. If the input coordinates have length 1, then a named numeric vector is returned if 
 #' @export
 #' 
-et_projection_rhumb <- function(latitude, longitude, bearing, distance, output_type="data.table") {
-  warning("et_projection_rhumb is deprecated and will go away when earthtools 2.x.y is released.  Use et_projection(method=\"rhumb\") instead")
- et_projection.numeric(latitude, longitude, bearing, distance, output_type, method = "rhumb")
+compute_projection_rhumb <- function(latitude, longitude, bearing, distance, output_type="data.table") {
+  warning("compute_projection_rhumb is deprecated and will go away when earthtools 2.x.y is released.  Use compute_projection(method=\"rhumb\") instead")
+ compute_projection.numeric(latitude, longitude, bearing, distance, output_type, method = "rhumb")
 }
