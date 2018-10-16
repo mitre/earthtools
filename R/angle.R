@@ -9,7 +9,7 @@
 #' @param turn_direction character string, should be one of
 #'  \code{"closest", "left", "right"}
 #' @export
-et_turn_magnitude <- function(angle1, angle2, turn_direction="closest") {
+compute_turn_magnitude <- function(angle1, angle2, turn_direction="closest") {
   
   # make everything the same size
   n1 <- length(angle1)

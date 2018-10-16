@@ -4,7 +4,7 @@
 #' 
 #' @export
 #' @author Kevin Sprong <ksprong@@mitre.org>
-et_parse_lls <- function(strIn) {
+compute_parse_lls <- function(strIn) {
   # parse string in for seconds -> decimal degrees and direction
   degreesOut <- as.double(substr(strIn, 1, nchar(strIn) - 1)) / 3600
   direc <- substr(strIn, nchar(strIn), nchar(strIn))
@@ -26,7 +26,7 @@ et_parse_lls <- function(strIn) {
 #' @importFrom data.table tstrsplit
 #' @export
 #' @author Kevin Sprong <ksprong@@mitre.org>
-et_parse_lldms <- function(strIn) {
+compute_parse_lldms <- function(strIn) {
 
   tmp_list <- tstrsplit(strIn ,"-")
   
