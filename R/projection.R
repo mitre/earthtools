@@ -79,7 +79,7 @@ compute_projection.data.frame <- function(.data, latitude, longitude, bearing, d
   bearing_ <- determine_val(.data, substitute(bearing))
   dist_ <- determine_val(.data, substitute(distance))
   
-  compute_projection.numeric(lat_, lon_, bearing_, dist_,output_type = class(.data)) %>%
+  compute_projection.numeric(lat_, lon_, bearing_, dist_,output_type = class(.data), method=method) %>%
     rename(end_latitude=latitude, end_longitude=longitude) %>%
     bind_cols(.data,.)%>%
     format_return(class(.data)) %>%
@@ -168,4 +168,74 @@ compute_projection.numeric <- function(latitude, longitude, bearing, distance, o
 compute_projection_rhumb <- function(latitude, longitude, bearing, distance, output_type="data.table") {
   warning("compute_projection_rhumb is deprecated and will go away when earthtools 2.x.y is released.  Use compute_projection(method=\"rhumb\") instead")
  compute_projection.numeric(latitude, longitude, bearing, distance, output_type, method = "rhumb")
+}
+
+#' produce a ring of pseudo-nodes
+#'
+#' It can be useful to add a range ring of nodes to a graph. This function will select such
+#' nodes subject to radius and disance constraints. As a general rule the max distance should
+#' be twice the max fix distance tolerance so that aircraft "pass by" no more or less than one
+#' fix on the ring (assuming they don't double back or fly in at a near tangent heading)
+#'
+#' @param center_latitude Numeric. The latitude of the range ring center point.
+#' @param center_longitude Numeric. The longitude of the range ring center point.
+#' @param radius Numeric. The radius of the arc about the center point in nautical miles.
+#' @param dist_between_points Numeric. The maximum distance between points on the
+#'   range ring. Actual distance is between this upper bound and this minus the tolerance,
+#'   all in nautical miles.
+#' @param tolerance Numeric. How close to the target distance between points do you need to get?
+#' @param from_angle Numeric. The angle from the center point to the arc defining the left-most
+#'   point of the arc.
+#' @param to_angle Numeric. The angle from the center point to the arc defining the right-most
+#'   point of the arc (moving clockwise from the \code{from_angle}).
+#' 
+#' @export
+project_arc <- function(center_latitude, center_longitude, radius, dist_between_points, tolerance=0.01,
+                        from_angle = 0, to_angle = 359.999) {
+  
+  theta0 <- asin(dist_between_points/radius) * 180/pi
+  theta <- search_for_theta(interval=c(theta0-.5*theta0, theta0+.5*theta0),
+                            expected_separation=dist_between_points,
+                            tolerance=tolerance,
+                            center_latitude=center_latitude,
+                            center_longitude=center_longitude,
+                            radius=radius)
+  
+  if (from_angle > to_angle)
+    to_angle <- to_angle + 360
+  
+  return(compute_projection(center_latitude, center_longitude, 
+                            bearing=seq(from_angle, to_angle, by=theta) %% 360,
+                            distance=radius))
+}
+
+#' @noRd
+#' 
+#' Basically perform a binomial search over the interval to find an angle increment
+#' that will space points along the arc (w.r.t. great circle distance) by the expected
+#' separation
+search_for_theta <- function(interval, expected_separation, tolerance,
+                             center_latitude, center_longitude, radius) {
+  theta <- mean(interval)
+  p <- compute_projection(center_latitude, center_longitude, bearing=c(0, theta), distance=radius)
+  d <- compute_dist_haversine(p[1, latitude], p[1, longitude],p[2, latitude], p[2, longitude])
+  
+  delta <- expected_separation-d
+  if (delta > 0 && delta < tolerance)
+    return(theta)
+  
+  if (delta < 0)
+    return(search_for_theta(interval=c(min(interval), theta),
+                            expected_separation=expected_separation,
+                            tolerance=tolerance,
+                            center_latitude=center_latitude,
+                            center_longitude=center_longitude,
+                            radius=radius))
+  else # if (result < expected)
+    return(search_for_theta(interval=c(theta, max(interval)),
+                            expected_separation=expected_separation,
+                            tolerance=tolerance,
+                            center_latitude=center_latitude,
+                            center_longitude=center_longitude,
+                            radius=radius))
 }

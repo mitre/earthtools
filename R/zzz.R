@@ -8,15 +8,14 @@
 #' accurate results
 #' @return numeric, Earth's radius in nautical miles
 #' @export
-compute_get_earth_radius <- function() {
+get_earth_radius <- function() {
   return(getOption(".earthtools.earth.radius", .earth.radius.NMi))
-
 }
 
 #' @param radius Numeric scalar. The radius of the earth 
 #'   (or any other sphere you care about) in nautical miles.
-#' @rdname compute_get_earth_radius
+#' @rdname get_earth_radius
 #' @export
-compute_set_earth_radius <- function(radius) {
+set_earth_radius <- function(radius) {
   options(".earthtools.earth.radius"=radius)
 }
